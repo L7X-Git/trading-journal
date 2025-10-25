@@ -105,6 +105,8 @@ A free and open-source trading journal application built with React, FastAPI, an
    npm run dev
    ```
 
+   > **Tip:** When running a production preview (`npm run preview`) or serving the built assets from another origin, create a `.env` file in `frontend/` with `VITE_API_URL=http://localhost:8000` (or your backend host; the `/api` suffix is appended automatically). The frontend will automatically pick this base URL for API calls.
+
 ## API Endpoints
 
 ### Trades

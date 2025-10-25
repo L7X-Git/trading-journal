@@ -13,36 +13,36 @@ export default function PerformanceByTagTable({ data }) {
   }
 
   const getPnlColor = (pnl) => {
-    return pnl > 0 ? 'text-green-600' : 'text-red-600'
+    return pnl > 0 ? 'text-emerald-400' : 'text-rose-400'
   }
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Performance by Tag</h3>
+    <div className="bg-card rounded-lg shadow overflow-hidden border border-border transition-colors">
+      <div className="px-6 py-4 border-b border-border">
+        <h3 className="text-lg font-semibold text-card-foreground">Performance by Tag</h3>
       </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-border">
+          <thead className="bg-muted/50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Tag
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Total P&L
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Win Rate
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider">
                 Trades
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-card divide-y divide-border">
             {data.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+              <tr key={index} className="hover:bg-muted/40 transition-colors">
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-foreground">
                   {item.tag_name}
                 </td>
                 <td className={cn(
@@ -51,10 +51,10 @@ export default function PerformanceByTagTable({ data }) {
                 )}>
                   {formatCurrency(item.total_pnl)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {formatPercentage(item.win_rate)}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-foreground">
                   {item.trade_count}
                 </td>
               </tr>
@@ -63,7 +63,7 @@ export default function PerformanceByTagTable({ data }) {
         </table>
         {data.length === 0 && (
           <div className="text-center py-8">
-            <p className="text-gray-500">No tag data available</p>
+            <p className="text-muted-foreground">No tag data available</p>
           </div>
         )}
       </div>

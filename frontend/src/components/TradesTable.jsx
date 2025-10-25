@@ -1,113 +1,76 @@
+import { Link } from 'react-router-dom'
 import { cn } from '../lib/utils'
+import { formatDecimal } from '../lib/tradeCalculations'
 
 export default function TradesTable({ trades }) {
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(value)
-  }
+  const formatCurrency = (value) =>
+    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number(value || 0))
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
+  const formatDateTime = (value) => {
+    if (!value) return '—'
+    return new Date(value).toLocaleString()
   }
 
   const getPnlColor = (pnl) => {
-    if (pnl > 0) return 'text-green-600'
-    if (pnl < 0) return 'text-red-600'
-    return 'text-gray-600'
+    const amount = Number(pnl)
+    if (amount > 0) return 'text-emerald-400'
+    if (amount < 0) return 'text-rose-400'
+    return 'text-muted-foreground'
   }
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <div className="px-6 py-4 border-b border-gray-200">
-        <h3 className="text-lg font-semibold text-gray-900">Trades</h3>
+    <div className="overflow-hidden rounded-lg border border-border bg-card shadow">
+      <div className="flex items-center justify-between border-b border-border px-6 py-4">
+        <h3 className="text-lg font-semibold text-card-foreground">Trades</h3>
+        <span className="text-xs text-muted-foreground">{trades.length} results</span>
       </div>
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full divide-y divide-border text-sm">
+          <thead className="bg-muted/50 uppercase tracking-wider text-muted-foreground">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Symbol
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Entry Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Exit Date
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Entry Price
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Exit Price
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Quantity
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                P&L
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Tags
-              </th>
+              <TableHeader>Symbol</TableHeader>
+              <TableHeader>Direction</TableHeader>
+              <TableHeader>Strategy</TableHeader>
+              <TableHeader>Account</TableHeader>
+              <TableHeader>Entry</TableHeader>
+              <TableHeader>Exit</TableHeader>
+              <TableHeader>Qty</TableHeader>
+              <TableHeader>P&amp;L</TableHeader>
+              <TableHeader>R Multiple</TableHeader>
+              <TableHeader>Confirm.</TableHeader>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="divide-y divide-border text-card-foreground">
             {trades.map((trade) => (
-              <tr key={trade.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                  {trade.symbol}
+              <tr key={trade.id} className="hover:bg-muted/40 transition-colors">
+                <td className="px-6 py-3 font-medium">
+                  <Link to={`/trades/${trade.id}`} className="text-primary hover:underline">
+                    {trade.symbol}
+                  </Link>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {formatDate(trade.entry_timestamp)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {formatDate(trade.exit_timestamp)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {formatCurrency(trade.entry_price)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {formatCurrency(trade.exit_price)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  {trade.quantity}
-                </td>
-                <td className={cn(
-                  "px-6 py-4 whitespace-nowrap text-sm font-medium",
-                  getPnlColor(trade.net_pnl)
-                )}>
-                  {formatCurrency(trade.net_pnl)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                  <div className="flex flex-wrap gap-1">
-                    {trade.tags.map((tag, index) => (
-                      <span
-                        key={index}
-                        className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                      >
-                        {tag.name}
-                      </span>
-                    ))}
-                  </div>
+                <td className="px-6 py-3 text-muted-foreground">{trade.direction}</td>
+                <td className="px-6 py-3">{trade.strategy?.name || '—'}</td>
+                <td className="px-6 py-3">{trade.account?.name || '—'}</td>
+                <td className="px-6 py-3 text-muted-foreground">{formatDateTime(trade.entry_timestamp || trade.entryDateTime)}</td>
+                <td className="px-6 py-3 text-muted-foreground">{formatDateTime(trade.exit_timestamp || trade.exitDateTime)}</td>
+                <td className="px-6 py-3">{formatDecimal(trade.quantity, 2)}</td>
+                <td className={cn('px-6 py-3 font-semibold', getPnlColor(trade.pnl))}>{formatCurrency(trade.pnl)}</td>
+                <td className="px-6 py-3">{trade.r_multiple ? `${formatDecimal(trade.r_multiple, 2)}R` : '—'}</td>
+                <td className="px-6 py-3">
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs text-primary">
+                    {trade.confirmations_count || 0}
+                  </span>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {trades.length === 0 && (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No trades found</p>
-          </div>
-        )}
+        {trades.length === 0 && <p className="py-8 text-center text-muted-foreground">No trades found</p>}
       </div>
     </div>
   )
+}
+
+function TableHeader({ children }) {
+  return <th className="px-6 py-3 text-left text-xs font-medium">{children}</th>
 }

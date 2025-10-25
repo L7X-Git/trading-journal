@@ -17,6 +17,8 @@
     "recharts": "^2.8.0",
     "lucide-react": "^0.294.0",
     "clsx": "^2.0.0",
+    "decimal.js": "^10.4.3",
+    "sonner": "^1.4.0",
     "tailwind-merge": "^2.0.0"
   },
   "devDependencies": {

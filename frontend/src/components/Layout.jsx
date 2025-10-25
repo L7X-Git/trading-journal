@@ -1,32 +1,35 @@
 import { Link, useLocation } from 'react-router-dom'
 import { cn } from '../lib/utils'
-import { 
-  LayoutDashboard, 
-  List, 
+import {
+  Brain,
+  LayoutDashboard,
+  List,
   PlusCircle,
   TrendingUp,
-  FileText
+  Wallet,
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
   { name: 'Trades', href: '/trades', icon: List },
   { name: 'Add Trade', href: '/add-trade', icon: PlusCircle },
+  { name: 'Strategies', href: '/settings/strategies', icon: Brain },
+  { name: 'Accounts', href: '/settings/accounts', icon: Wallet },
 ]
 
 export default function Layout({ children }) {
   const location = useLocation()
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background text-foreground transition-colors">
       {/* Navigation */}
-      <nav className="bg-white shadow-sm border-b">
+      <nav className="bg-card/80 shadow-sm border-b border-border backdrop-blur">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex">
               <div className="flex-shrink-0 flex items-center">
-                <TrendingUp className="h-8 w-8 text-blue-600" />
-                <span className="ml-2 text-xl font-bold text-gray-900">Trading Journal</span>
+                <TrendingUp className="h-8 w-8 text-primary" />
+                <span className="ml-2 text-xl font-bold text-foreground">Trading Journal</span>
               </div>
               <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                 {navigation.map((item) => {
@@ -36,10 +39,10 @@ export default function Layout({ children }) {
                       key={item.name}
                       to={item.href}
                       className={cn(
-                        location.pathname === item.href
-                          ? 'border-blue-500 text-gray-900'
-                          : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300',
-                        'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
+                        location.pathname.startsWith(item.href)
+                          ? 'border-primary text-foreground'
+                          : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border',
+                        'inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors'
                       )}
                     >
                       <Icon className="h-4 w-4 mr-2" />

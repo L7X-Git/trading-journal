@@ -3,6 +3,11 @@ import { cn } from '../lib/utils'
 export default function KPICard({ title, value, subtitle, trend, className }) {
   const formatValue = (val) => {
     if (typeof val === 'number') {
+      if (!Number.isFinite(val)) {
+        if (val === Infinity) return '∞'
+        if (val === -Infinity) return '−∞'
+        return '—'
+      }
       if (title.includes('Rate') || title.includes('Factor')) {
         return val.toFixed(2)
       }
@@ -15,8 +20,8 @@ export default function KPICard({ title, value, subtitle, trend, className }) {
   }
 
   const getTrendColor = () => {
-    if (!trend) return 'text-gray-500'
-    return trend > 0 ? 'text-green-600' : 'text-red-600'
+    if (!trend) return 'text-muted-foreground'
+    return trend > 0 ? 'text-emerald-400' : 'text-rose-400'
   }
 
   const getTrendIcon = () => {
@@ -25,15 +30,15 @@ export default function KPICard({ title, value, subtitle, trend, className }) {
   }
 
   return (
-    <div className={cn('bg-white rounded-lg shadow p-6', className)}>
+    <div className={cn('bg-card text-card-foreground rounded-lg shadow p-6 transition-colors', className)}>
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-medium text-gray-600">{title}</p>
-          <p className="text-2xl font-bold text-gray-900 mt-1">
+          <p className="text-sm font-medium text-muted-foreground">{title}</p>
+          <p className="text-2xl font-bold text-foreground mt-1">
             {formatValue(value)}
           </p>
           {subtitle && (
-            <p className="text-sm text-gray-500 mt-1">{subtitle}</p>
+            <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
           )}
         </div>
         {trend && (

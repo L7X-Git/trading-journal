@@ -47,3 +47,12 @@ test
 prompt
 
 server.log
+
+# project-specific
+backend/venv/
+frontend/node_modules/
+frontend/dist/
+uvicorn.log
+__pycache__/
+*.pyc
+backend/alembic/versions/__pycache__/
